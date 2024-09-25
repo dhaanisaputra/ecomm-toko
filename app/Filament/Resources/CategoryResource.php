@@ -9,7 +9,10 @@ use App\Models\Category;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
+use Filament\Actions\ViewAction;
 use Filament\Resources\Resource;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Section;
@@ -19,8 +22,6 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\CategoryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CategoryResource\RelationManagers;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\ViewAction;
 
 class CategoryResource extends Resource
 {
@@ -50,7 +51,7 @@ class CategoryResource extends Resource
 
                     FileUpload::make('image')
                         ->image()
-                        ->directory('category'),
+                        ->directory('categories'),
 
                     Toggle::make('is_active')
                         ->required()
