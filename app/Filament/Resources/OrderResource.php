@@ -76,7 +76,7 @@ class OrderResource extends Resource
                             ->required(),
                         Select::make('shipping_method')
                             ->options(['jne' => 'JNE', 'jnt' => 'JnT', 'pos' => 'POS']),
-                        Textarea::make('note')
+                        Textarea::make('notes')
                             ->columnSpanFull(),
                     ])->columns(2),
 
