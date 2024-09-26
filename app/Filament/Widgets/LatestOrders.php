@@ -1,38 +1,33 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\RelationManagers;
+namespace App\Filament\Widgets;
 
+use Filament\Tables;
+use Filament\Tables\Table;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\OrderResource;
 use App\Models\Order;
-use Filament\Forms;
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Actions\Action;
+use Filament\Widgets\TableWidget as BaseWidget;
 
-class OrdersRelationManager extends RelationManager
+class LatestOrders extends BaseWidget
 {
-    protected static string $relationship = 'orders';
+    protected int | string | array $columnSpan = 'full';
 
-    public function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                //
-            ]);
-    }
+    protected static ?int $sort = 2; //to make an widget statistic on the top Latest Order widget
 
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('id')
+            ->query(OrderResource::getEloquentQuery())
+            ->defaultPaginationPageOption(5)
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('id')
                     ->label('Order ID')
+                    ->searchable(),
+                TextColumn::make('user.name')
+                    ->label('Customer')
                     ->searchable(),
                 TextColumn::make('status')
                     ->badge()
@@ -70,23 +65,11 @@ class OrdersRelationManager extends RelationManager
                     ->label('Grand Total')
                     ->money('IDR', locale: 'id'),
             ])
-            ->filters([
-                //
-            ])
-            ->headerActions([
-                // Tables\Actions\CreateAction::make(),
-            ])
             ->actions([
                 Action::make('View Order')
                     ->url(fn(Order $record): string => OrderResource::getUrl('view', ['record' => $record]))
                     ->color('info')
                     ->icon('heroicon-o-eye'),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 }
