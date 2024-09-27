@@ -8,12 +8,16 @@ use Livewire\Component;
 use App\Models\Category;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
+use App\helper\CartManagement;
+use App\Livewire\Partials\Navbar;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Title;
 
 #[Title('Products Pages - Ecomm Toko')]
 class ProductsPages extends Component
 {
     use WithPagination;
+    use LivewireAlert;
 
     #[Url]
     public $selectedCategories = [];
@@ -29,6 +33,23 @@ class ProductsPages extends Component
 
     #[Url]
     public $price_range = 20000000;
+
+    #[Url]
+    public $sort = 'latest';
+
+    // add item to cart method
+    public function addToCart($product_id)
+    {
+        $total_count = CartManagement::addItemToCart($product_id);
+
+        $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
+
+        $this->alert('success', 'Product Added to Cart Successfully!', [
+            'position' => 'top-end',
+            'timer' => 3000,
+            'toast' => true,
+        ]);
+    }
 
     public function render()
     {
@@ -52,6 +73,14 @@ class ProductsPages extends Component
         // this for filter by range price
         if ($this->price_range) {
             $productQuery->whereBetween('price', [0, $this->price_range]);
+        }
+        // this for filter by sort latest product
+        if ($this->sort == 'latest') {
+            $productQuery->latest();
+        }
+        // this for filter by sort price product
+        if ($this->sort == 'price') {
+            $productQuery->orderBy('price');
         }
 
         return view('livewire.products-pages', [
