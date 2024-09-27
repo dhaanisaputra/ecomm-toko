@@ -5,13 +5,14 @@
                 <div class="w-full pr-2 lg:w-1/4 lg:block">
                     <div class="p-4 mb-5 bg-white border border-gray-200 dark:border-gray-900 dark:bg-gray-900">
                         <h2 class="text-2xl font-bold dark:text-gray-400"> Categories</h2>
+                        {{-- {{ $selectedCategories }} --}}
                         <div class="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
                         <ul>
                             @foreach ($categories as $item)
                                 <li class="mb-4" wire:key="{{ $item->id }}">
                                     <label for="{{ $item->slug }}" class="flex items-center dark:text-gray-400 ">
-                                        <input type="checkbox" id="{{ $item->slug }}" value="{{ $item->id }}"
-                                            class="w-4 h-4 mr-2">
+                                        <input type="checkbox" wire:model.live="selectedCategories"
+                                            id="{{ $item->slug }}" value="{{ $item->id }}" class="w-4 h-4 mr-2">
                                         <span class="text-lg">{{ $item->name }}</span>
                                     </label>
                                 </li>
@@ -26,7 +27,7 @@
                                 <li class="mb-4" wire:key="{{ $item->id }}">
                                     <label for="{{ $item->slug }}" class="flex items-center dark:text-gray-300">
                                         <input type="checkbox" id="{{ $item->slug }}" value="{{ $item->id }}"
-                                            class="w-4 h-4 mr-2">
+                                            class="w-4 h-4 mr-2" wire:model.live="selectedBrands">
                                         <span class="text-lg dark:text-gray-400">{{ $item->name }}</span>
                                     </label>
                                 </li>
@@ -38,14 +39,16 @@
                         <div class="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
                         <ul>
                             <li class="mb-4">
-                                <label for="" class="flex items-center dark:text-gray-300">
-                                    <input type="checkbox" class="w-4 h-4 mr-2">
-                                    <span class="text-lg dark:text-gray-400">In Stock</span>
+                                <label for="featured" class="flex items-center dark:text-gray-300">
+                                    <input type="checkbox" id="featured" class="w-4 h-4 mr-2"
+                                        wire:model.live="featured" value="1">
+                                    <span class="text-lg dark:text-gray-400">Featured Products</span>
                                 </label>
                             </li>
                             <li class="mb-4">
-                                <label for="" class="flex items-center dark:text-gray-300">
-                                    <input type="checkbox" class="w-4 h-4 mr-2">
+                                <label for="on_sale" class="flex items-center dark:text-gray-300">
+                                    <input type="checkbox" id="on_sale" value="1" class="w-4 h-4 mr-2"
+                                        wire:model.live="on_sale">
                                     <span class="text-lg dark:text-gray-400">On Sale</span>
                                 </label>
                             </li>
@@ -56,12 +59,15 @@
                         <h2 class="text-2xl font-bold dark:text-gray-400">Price</h2>
                         <div class="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
                         <div>
+                            <div class="font-semibold">{{ Number::currency($price_range, 'IDR', 'id') }}</div>
                             <input type="range"
                                 class="w-full h-1 mb-4 bg-blue-100 rounded appearance-none cursor-pointer"
-                                max="500000" value="100000" step="100000">
+                                max="20000000" value="20000000" step="2000000" wire:model.live="price_range">
                             <div class="flex justify-between ">
-                                <span class="inline-block text-lg font-bold text-blue-400 ">Rp 1.000</span>
-                                <span class="inline-block text-lg font-bold text-blue-400 ">Rp 500.000.000</span>
+                                <span
+                                    class="inline-block text-lg font-bold text-blue-400 ">{{ Number::currency(0, 'IDR', 'id') }}</span>
+                                <span
+                                    class="inline-block text-lg font-bold text-blue-400 ">{{ Number::currency(20000000, 'IDR', 'id') }}</span>
                             </div>
                         </div>
                     </div>
