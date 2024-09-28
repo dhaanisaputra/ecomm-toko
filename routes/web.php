@@ -25,19 +25,25 @@ Route::get('/products', ProductsPages::class);
 Route::get('/cart', CartPages::class);
 Route::get('/products/{slug}', ProductDetailPages::class);
 
-Route::get('/checkout', CheckoutPages::class);
-Route::get('/my-orders', MyOrdersPages::class);
-Route::get('/my-orders/{order}', MyOrderDetailPages::class);
 
-Route::get('/login', LoginPage::class);
-Route::get('/register', RegisterPage::class);
-Route::get('/forgot', ForgotPasswordPages::class);
-Route::get('/reset', ResettPasswordPages::class);
+Route::middleware('guest')->group(function () {
+    Route::get('/login', LoginPage::class)->name('login');
+    Route::get('/register', RegisterPage::class);
+    Route::get('/forgot', ForgotPasswordPages::class);
+    Route::get('/reset', ResettPasswordPages::class);
+});
 
-Route::get('/success', SuccessPages::class);
-Route::get('/cancel', CancelPages::class);
-
-
+Route::middleware('auth')->group(function () {
+    Route::get('/logout', function () {
+        auth()->guard('web')->logout();
+        return redirect('/');
+    });
+    Route::get('/checkout', CheckoutPages::class);
+    Route::get('/my-orders', MyOrdersPages::class);
+    Route::get('/my-orders/{order}', MyOrderDetailPages::class);
+    Route::get('/success', SuccessPages::class);
+    Route::get('/cancel', CancelPages::class);
+});
 
 // crendential login
 // user: admintoko@gmail.com
