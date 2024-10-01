@@ -41,8 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', CheckoutPages::class);
     Route::get('/my-orders', MyOrdersPages::class);
     Route::get('/my-orders/{order}', MyOrderDetailPages::class);
-    Route::get('/success', SuccessPages::class);
-    Route::get('/cancel', CancelPages::class);
+    Route::get('/success', SuccessPages::class)->name('success');
+    Route::get('/cancel', CancelPages::class)->name('cancel');
 });
 
 // crendential login
