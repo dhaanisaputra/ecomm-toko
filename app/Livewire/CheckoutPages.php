@@ -8,7 +8,7 @@ use App\Models\Address;
 use App\Models\Order;
 use Livewire\Attributes\Title;
 
-#[Title('Checkout')]
+#[Title('Checkout - Ecomm Toko')]
 class CheckoutPages extends Component
 {
 
